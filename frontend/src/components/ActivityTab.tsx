@@ -25,41 +25,56 @@ interface ActivityTabProps {
   onPageChange: (newPage: number) => void;
 }
 
-const ACTION_ICONS: Record<string, { icon: React.ReactNode; bg: string; text: string }> = {
+const ACTION_ICONS: Record<
+  string,
+  {
+    icon: React.ReactNode;
+    bg: string;
+    text: string;
+    glow: string;
+  }
+> = {
   TASK_CREATED: {
     icon: <PlusCircle className="w-4 h-4" />,
-    bg: 'bg-emerald-50 border-emerald-200',
-    text: 'text-emerald-700',
+    bg: 'bg-emerald-500/10 border-emerald-500/20',
+    text: 'text-emerald-400',
+    glow: 'shadow-emerald-500/10',
   },
   TASK_DELETED: {
     icon: <Trash2 className="w-4 h-4" />,
-    bg: 'bg-rose-50 border-rose-200',
-    text: 'text-rose-700',
+    bg: 'bg-rose-500/10 border-rose-500/20',
+    text: 'text-rose-400',
+    glow: 'shadow-rose-500/10',
   },
   STATUS_CHANGED: {
     icon: <CheckCircle className="w-4 h-4" />,
-    bg: 'bg-blue-50 border-blue-200',
-    text: 'text-blue-700',
+    bg: 'bg-blue-500/10 border-blue-500/20',
+    text: 'text-blue-400',
+    glow: 'shadow-blue-500/10',
   },
   ASSIGNMENT_CHANGED: {
     icon: <UserCheck className="w-4 h-4" />,
-    bg: 'bg-purple-50 border-purple-200',
-    text: 'text-purple-700',
+    bg: 'bg-purple-500/10 border-purple-500/20',
+    text: 'text-purple-400',
+    glow: 'shadow-purple-500/10',
   },
   TASK_UPDATED: {
     icon: <Edit className="w-4 h-4" />,
-    bg: 'bg-amber-50 border-amber-200',
-    text: 'text-amber-700',
+    bg: 'bg-amber-500/10 border-amber-500/20',
+    text: 'text-amber-400',
+    glow: 'shadow-amber-500/10',
   },
   MEMBER_ADDED: {
     icon: <UserPlus className="w-4 h-4" />,
-    bg: 'bg-indigo-50 border-indigo-200',
-    text: 'text-indigo-700',
+    bg: 'bg-indigo-500/10 border-indigo-500/20',
+    text: 'text-indigo-400',
+    glow: 'shadow-indigo-500/10',
   },
   MEMBER_REMOVED: {
     icon: <UserMinus className="w-4 h-4" />,
-    bg: 'bg-slate-100 border-slate-200',
-    text: 'text-slate-700',
+    bg: 'bg-slate-500/10 border-slate-500/20',
+    text: 'text-slate-400',
+    glow: 'shadow-slate-500/10',
   },
 };
 
@@ -72,90 +87,161 @@ export const ActivityTab: React.FC<ActivityTabProps> = ({
   onPageChange,
 }) => {
   return (
-    <div className="space-y-4 max-w-4xl">
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
-        <div>
-          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <ActivityIcon className="w-5 h-5 text-indigo-600" />
-            <span>Project Audit Trail & Activity Feed</span>
-          </h3>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Immutable log of task creations, status updates, reassignments, and team changes.
-          </p>
-        </div>
-        <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-          {total} events
-        </span>
-      </div>
+    <div className="space-y-5 max-w-5xl">
+      {/* Header */}
+      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl p-5">
+        {/* Background glow */}
+        <div className="absolute -top-16 -right-16 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-        {isLoading ? (
-          <div className="py-16 text-center text-slate-400">
-            <div className="flex flex-col items-center justify-center gap-2">
-              <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-              <span className="text-xs">Loading activity feed...</span>
+        <div className="relative flex items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+              <ActivityIcon className="w-5 h-5 text-indigo-400" />
+            </div>
+
+            <div>
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                Activity Feed
+              </h3>
+
+              <p className="text-xs text-slate-400 mt-1 max-w-xl">
+                Track project activity, task updates, assignments, and team
+                changes.
+              </p>
             </div>
           </div>
+
+          {/* Event Count */}
+          <div className="shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.08]">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+
+            <span className="text-xs font-semibold text-slate-300">
+              {total} {total === 1 ? 'event' : 'events'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Activity List */}
+      <div className="rounded-2xl border border-white/[0.08] bg-white/[0.035] backdrop-blur-xl overflow-hidden">
+        {isLoading ? (
+          <div className="py-20 flex flex-col items-center justify-center">
+            <div className="relative w-10 h-10">
+              <div className="absolute inset-0 rounded-full border-4 border-white/10" />
+
+              <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-indigo-400 border-r-violet-400 animate-spin" />
+            </div>
+
+            <p className="mt-4 text-xs text-slate-400">
+              Loading activity feed...
+            </p>
+          </div>
         ) : activities.length === 0 ? (
-          <div className="py-16 text-center text-slate-400 text-xs italic">
-            No activity recorded yet for this project.
+          <div className="py-20 flex flex-col items-center justify-center text-center px-6">
+            <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-4">
+              <ActivityIcon className="w-6 h-6 text-slate-500" />
+            </div>
+
+            <h4 className="text-sm font-semibold text-slate-300">
+              No activity yet
+            </h4>
+
+            <p className="text-xs text-slate-500 mt-1 max-w-sm">
+              Project activity will appear here when tasks or team members are
+              updated.
+            </p>
           </div>
         ) : (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-white/[0.06]">
             {activities.map((act) => {
               const meta = ACTION_ICONS[act.action] || {
                 icon: <ActivityIcon className="w-4 h-4" />,
-                bg: 'bg-slate-50 border-slate-200',
-                text: 'text-slate-700',
+                bg: 'bg-slate-500/10 border-slate-500/20',
+                text: 'text-slate-400',
+                glow: 'shadow-slate-500/10',
               };
 
               return (
-                <div key={act._id} className="p-4 flex items-start gap-3.5 hover:bg-slate-50/60 transition">
+                <div
+                  key={act._id}
+                  className="group p-4 sm:p-5 flex items-start gap-3.5 hover:bg-white/[0.025] transition-all duration-200"
+                >
+                  {/* Action Icon */}
                   <div
-                    className={`w-8 h-8 rounded-xl flex items-center justify-center border shrink-0 mt-0.5 ${meta.bg} ${meta.text}`}
+                    className={`
+                      w-9 h-9 rounded-xl flex items-center justify-center
+                      border shrink-0 mt-0.5
+                      ${meta.bg}
+                      ${meta.text}
+                      shadow-lg ${meta.glow}
+                    `}
                   >
                     {meta.icon}
                   </div>
 
+                  {/* Content */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-xs text-slate-900">
-                        <span className="font-bold text-slate-900">{act.userName}</span>{' '}
-                        <span className="text-slate-700">
-                          {act.details?.description || act.action.replace('_', ' ').toLowerCase()}
+                    {/* Main Activity */}
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1.5 sm:gap-4">
+                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        <span className="font-bold text-white">
+                          {act.userName}
+                        </span>{' '}
+                        <span className="text-slate-400">
+                          {act.details?.description ||
+                            act.action
+                              .replace(/_/g, ' ')
+                              .toLowerCase()}
                         </span>
                       </p>
-                      <span className="text-[10px] text-slate-400 shrink-0">
+
+                      {/* Time */}
+                      <span className="text-[10px] text-slate-500 shrink-0">
                         {act.createdAt
-                          ? formatDistanceToNow(new Date(act.createdAt), { addSuffix: true })
+                          ? formatDistanceToNow(new Date(act.createdAt), {
+                              addSuffix: true,
+                            })
                           : ''}
                       </span>
                     </div>
 
-                    {/* Previous vs New Value Pill (where relevant) */}
-                    {act.details && (act.details.previousValue || act.details.newValue) && (
-                      <div className="mt-2 flex items-center gap-2 text-[11px]">
-                        {act.details.previousValue && (
-                          <span className="line-through text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
-                            {act.details.previousValue}
-                          </span>
-                        )}
-                        {act.details.previousValue && act.details.newValue && (
-                          <span className="text-slate-400">→</span>
-                        )}
-                        {act.details.newValue && (
-                          <span className="font-semibold text-slate-800 bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded border border-indigo-200">
-                            {act.details.newValue}
-                          </span>
-                        )}
-                      </div>
-                    )}
+                    {/* Previous / New Value */}
+                    {act.details &&
+                      (act.details.previousValue ||
+                        act.details.newValue) && (
+                        <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px]">
+                          {act.details.previousValue && (
+                            <span className="line-through text-slate-500 bg-white/[0.03] px-2.5 py-1 rounded-lg border border-white/[0.07]">
+                              {act.details.previousValue}
+                            </span>
+                          )}
 
-                    {/* Preserved Task Title if task was deleted */}
+                          {act.details.previousValue &&
+                            act.details.newValue && (
+                              <span className="text-slate-600">
+                                →
+                              </span>
+                            )}
+
+                          {act.details.newValue && (
+                            <span className="font-semibold text-indigo-300 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20">
+                              {act.details.newValue}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                    {/* Deleted Task */}
                     {act.action === 'TASK_DELETED' && act.taskTitle && (
-                      <p className="text-[11px] text-slate-500 mt-1 italic">
-                        Preserved Title: &ldquo;{act.taskTitle}&rdquo;
-                      </p>
+                      <div className="mt-2 flex items-center gap-2">
+                        <span className="text-[10px] uppercase tracking-wider text-slate-600">
+                          Preserved title
+                        </span>
+
+                        <p className="text-[11px] text-slate-500 italic truncate">
+                          “{act.taskTitle}”
+                        </p>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -164,24 +250,57 @@ export const ActivityTab: React.FC<ActivityTabProps> = ({
           </div>
         )}
 
-        {/* Pagination Bar */}
+        {/* Pagination */}
         {totalPages > 1 && (
-          <div className="p-4 border-t border-slate-200 bg-slate-50/50 flex items-center justify-between text-xs text-slate-600">
-            <span>
-              Page {page} of {totalPages}
-            </span>
+          <div className="px-4 sm:px-5 py-3.5 border-t border-white/[0.06] bg-white/[0.015] flex items-center justify-between">
+            <div className="text-[11px] text-slate-500">
+              Page{' '}
+              <span className="text-slate-300 font-semibold">{page}</span>{' '}
+              of{' '}
+              <span className="text-slate-300 font-semibold">
+                {totalPages}
+              </span>
+            </div>
+
             <div className="flex items-center gap-2">
               <button
+                type="button"
                 disabled={page <= 1 || isLoading}
                 onClick={() => onPageChange(page - 1)}
-                className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                aria-label="Previous page"
+                className="
+                  w-8 h-8 rounded-lg
+                  border border-white/[0.08]
+                  bg-white/[0.03]
+                  text-slate-400
+                  hover:bg-white/[0.07]
+                  hover:text-white
+                  disabled:opacity-30
+                  disabled:cursor-not-allowed
+                  transition-all
+                  flex items-center justify-center
+                "
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
+
               <button
+                type="button"
                 disabled={page >= totalPages || isLoading}
                 onClick={() => onPageChange(page + 1)}
-                className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                aria-label="Next page"
+                className="
+                  w-8 h-8 rounded-lg
+                  border border-white/[0.08]
+                  bg-white/[0.03]
+                  text-black
+                  hover:bg-white/[0.07]
+                  hover:text-black
+                  disabled:opacity-30
+                  disabled:cursor-not-allowed
+                  transition-all
+                  flex items-center justify-center
+                "
               >
                 <ChevronRight className="w-4 h-4" />
               </button>

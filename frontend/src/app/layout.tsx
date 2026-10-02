@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-// @ts-expect-error CSS is loaded by Next.js and has no TypeScript module declarations.
+// @ts-expect-error Next.js handles global CSS side-effect imports at build time.
 import './globals.css';
 import { AuthProvider } from '../context/AuthContext';
 
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-[#080812]">
-      <body className="min-h-screen bg-[#080812] text-white antialiased">
+      <body className="min-h-screen bg-[#080812] text-black antialiased">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
