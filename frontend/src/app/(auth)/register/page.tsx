@@ -7,7 +7,6 @@ import {
   UserPlus,
   AlertCircle,
   ArrowLeft,
-  Sparkles,
   CheckCircle2,
   ShieldCheck,
   Users,
@@ -119,9 +118,6 @@ export default function RegisterPage() {
           <div className="max-w-xl">
 
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-violet-400/20 bg-violet-400/10 px-3 py-1.5 text-xs font-medium text-violet-300">
-
-              <Sparkles className="h-3.5 w-3.5" />
-
               Start collaborating today
 
             </div>

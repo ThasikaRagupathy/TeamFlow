@@ -6,7 +6,6 @@ import {
   FolderKanban,
   Shield,
   ChevronRight,
-  Sparkles,
   LayoutDashboard,
   Circle,
 } from 'lucide-react';
@@ -88,15 +87,11 @@ export default function Navbar({ projectName }: NavbarProps) {
         <div className="ml-auto flex items-center gap-2">
           {user && (
             <div className="hidden items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 md:flex">
-              <div
-                className={`flex h-6 w-6 items-center justify-center rounded-lg ${
-                  isOwner
-                    ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400'
-                    : 'bg-violet-500/10 text-violet-600 dark:text-violet-400'
-                }`}
-              >
-                {isOwner ? <Shield size={13} /> : <Sparkles size={13} />}
-              </div>
+              {isOwner && (
+                <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                  <Shield size={13} />
+                </div>
+              )}
               <div>
                 <p className="text-[9px] font-medium uppercase tracking-wider text-[var(--muted)]">
                   Role

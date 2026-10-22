@@ -15,7 +15,6 @@ import {
   ArrowRight,
   AlertCircle,
   X,
-  Sparkles,
   Search,
   Layers3,
   Crown,
@@ -171,11 +170,7 @@ export default function ProjectsPage() {
         <section className="mb-8">
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <div>
-              <div className="mb-3 flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 shadow-sm shadow-indigo-200">
-                  <Sparkles className="h-3.5 w-3.5 text-white" />
-                </div>
-
+              <div className="mb-3">
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-600">
                   Workspace
                 </span>

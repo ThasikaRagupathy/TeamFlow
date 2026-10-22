@@ -5,7 +5,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../../context/AuthContext';
 import { api, ApiError } from '../../../lib/api';
 import { Project, Task, DashboardData, Activity, TaskStatus } from '../../../types';
-import { Navbar } from '../../../components/Navbar';
+import Navbar from '../../../components/Navbar';
 import { KanbanBoard } from '../../../components/KanbanBoard';
 import { TaskTable } from '../../../components/TaskTable';
 import { DashboardView } from '../../../components/DashboardView';
@@ -274,7 +274,7 @@ export default function ProjectWorkspacePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
-      <Navbar projectName={project.name} userRole={userRole} />
+      <Navbar projectName={project.name} />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Project Header Bar */}

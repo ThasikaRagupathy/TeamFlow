@@ -7,8 +7,7 @@ import { useAuth } from '../../../context/AuthContext';
 
 import {
   LogIn,
-  Sparkles,
-  AlertCircle,
+ AlertCircle,
   ArrowRight,
   CheckCircle2,
   Users,
@@ -239,9 +238,7 @@ function LoginForm() {
                 text-violet-300
               "
             >
-              <Sparkles className="h-3.5 w-3.5" />
-
-              The smarter way to work together
+             The smarter way to work together
             </div>
 
             <h1
@@ -798,9 +795,7 @@ function LoginForm() {
 
               <div className="mt-4 flex items-center justify-center gap-2 text-[10px] text-slate-500">
 
-                <Sparkles className="h-3 w-3 text-violet-400" />
-
-                Your workspace, projects, tasks and team activity in one place
+               Your workspace, projects, tasks and team activity in one place
 
               </div>
 
