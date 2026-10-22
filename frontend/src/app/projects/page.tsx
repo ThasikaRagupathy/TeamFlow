@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../lib/api';
 import { Project } from '../../types';
-import { Navbar } from '../../components/Navbar';
+import Navbar from '../../components/Navbar';
 import {
   FolderKanban,
   Plus,
