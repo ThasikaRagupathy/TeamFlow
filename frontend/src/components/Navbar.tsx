@@ -1,8 +1,6 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
-import { useAuth } from '../context/AuthContext';
 import {
   LogOut,
   FolderKanban,
@@ -13,207 +11,154 @@ import {
   Circle,
 } from 'lucide-react';
 
+import { useAuth } from '../context/AuthContext';
+import ThemeToggle from './ThemeToggle';
+
 interface NavbarProps {
   projectName?: string;
-  userRole?: 'owner' | 'member';
 }
 
-export const Navbar: React.FC<NavbarProps> = ({
-  projectName,
-  userRole,
-}) => {
+export default function Navbar({ projectName }: NavbarProps) {
   const { user, logout } = useAuth();
 
+  const isOwner = false;
+  const userInitial = user?.name?.charAt(0)?.toUpperCase() || 'U';
+
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-2xl">
-      {/* Subtle top gradient */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-300 to-transparent opacity-70" />
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/85 backdrop-blur-2xl transition-colors duration-300">
+      <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-60" />
 
-      <div className="mx-auto flex h-[68px] max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* =====================================================
-            LEFT
-        ====================================================== */}
+      <div className="mx-auto flex h-[72px] max-w-[1600px] items-center px-4 sm:px-6 lg:px-8">
+        <Link href="/projects" className="group flex items-center gap-3">
+          <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-600 shadow-lg shadow-indigo-500/20 transition-transform duration-200 group-hover:scale-105">
+            <span className="text-sm font-black tracking-tight text-white">
+              TF
+            </span>
+            <div className="absolute inset-0 bg-white/10 opacity-0 transition duration-200 group-hover:opacity-100" />
+          </div>
 
-        <div className="flex min-w-0 items-center gap-3">
-          {/* TeamFlow Brand */}
+          <div className="hidden sm:block">
+            <div className="flex items-center gap-2">
+              <span className="text-[15px] font-bold tracking-tight text-[var(--foreground)]">
+                TeamFlow
+              </span>
+              <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                Live
+              </span>
+            </div>
+
+            <div className="mt-0.5 flex items-center gap-1.5">
+              <Circle size={6} fill="currentColor" className="text-emerald-500" />
+              <span className="text-[10px] font-medium text-[var(--muted)]">
+                Team Workspace
+              </span>
+            </div>
+          </div>
+        </Link>
+
+        <div className="mx-4 hidden h-8 w-px bg-[var(--border)] lg:block" />
+
+        <div className="hidden items-center gap-2 lg:flex">
           <Link
             href="/projects"
-            className="group flex shrink-0 items-center gap-3"
+            className="group flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-[12px] font-medium text-[var(--muted)] transition hover:bg-[var(--surface-hover)] hover:text-[var(--foreground)]"
           >
-            <div className="relative">
-              {/* Glow */}
-              <div className="absolute inset-[-5px] rounded-2xl bg-indigo-500/15 opacity-0 blur-xl transition duration-300 group-hover:opacity-100" />
-
-              {/* Logo */}
-              <div className="relative flex h-10 w-10 items-center justify-center rounded-[13px] bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-600 text-[11px] font-black tracking-tight text-white shadow-lg shadow-indigo-500/20 transition duration-300 group-hover:-translate-y-0.5 group-hover:shadow-indigo-500/30">
-                TF
-              </div>
-            </div>
-
-            <div className="hidden sm:block">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[15px] font-black tracking-tight text-slate-950">
-                  TeamFlow
-                </span>
-
-                <Sparkles className="h-3 w-3 text-violet-500" />
-              </div>
-
-              <div className="mt-0.5 flex items-center gap-1.5">
-                <span className="text-[8px] font-bold uppercase tracking-[0.18em] text-slate-400">
-                  Team Workspace
-                </span>
-
-                <span className="h-1 w-1 rounded-full bg-emerald-400" />
-
-                <span className="text-[8px] font-semibold text-emerald-500">
-                  Online
-                </span>
-              </div>
-            </div>
+            <LayoutDashboard size={14} />
+            <span>Workspace</span>
           </Link>
 
-          {/* Breadcrumb */}
           {projectName && (
             <>
-              <div className="hidden h-7 w-px bg-slate-200 sm:block" />
-
-              <ChevronRight className="h-4 w-4 shrink-0 text-slate-300 sm:hidden" />
-
-              <div className="flex min-w-0 items-center gap-2.5">
-                <ChevronRight className="hidden h-4 w-4 shrink-0 text-slate-300 sm:block" />
-
-                {/* Project Icon */}
-                <div className="hidden h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 sm:flex">
-                  <LayoutDashboard className="h-3.5 w-3.5" />
-                </div>
-
-                {/* Project Info */}
-                <div className="min-w-0">
-                  <p className="max-w-[130px] truncate text-[11px] font-black text-slate-900 sm:max-w-[220px] sm:text-xs">
+              <ChevronRight size={14} className="text-[var(--muted-light)]" />
+              <div className="flex items-center gap-2 rounded-lg bg-[var(--surface-secondary)] px-2.5 py-1.5">
+                <FolderKanban size={14} className="text-indigo-500" />
+                <div className="max-w-[220px]">
+                  <p className="truncate text-[12px] font-semibold text-[var(--foreground)]">
                     {projectName}
                   </p>
-
-                  <p className="hidden text-[8px] font-medium uppercase tracking-wider text-slate-400 sm:block">
-                    Current workspace
+                  <p className="text-[9px] text-[var(--muted)]">
+                    Current project
                   </p>
                 </div>
-
-                {/* Role */}
-                {userRole && (
-                  <span
-                    className={`
-                      hidden items-center gap-1.5 rounded-full border px-2.5 py-1
-                      text-[9px] font-bold sm:inline-flex
-                      ${
-                        userRole === 'owner'
-                          ? 'border-violet-200 bg-violet-50 text-violet-700'
-                          : 'border-slate-200 bg-slate-50 text-slate-600'
-                      }
-                    `}
-                  >
-                    {userRole === 'owner' ? (
-                      <Shield className="h-3 w-3" />
-                    ) : (
-                      <Circle className="h-2 w-2 fill-current" />
-                    )}
-
-                    {userRole === 'owner' ? 'Owner' : 'Member'}
-                  </span>
-                )}
               </div>
             </>
           )}
         </div>
 
-        {/* =====================================================
-            RIGHT
-        ====================================================== */}
-
-        <div className="flex items-center gap-2">
-          {/* All Projects */}
-          <Link
-            href="/projects"
-            className="
-              hidden sm:inline-flex
-              items-center gap-2
-              rounded-xl
-              border border-slate-200/80
-              bg-white/80
-              px-3.5 py-2.5
-              text-[10px] font-bold
-              text-slate-600
-              shadow-sm
-              transition-all duration-200
-              hover:border-indigo-200
-              hover:bg-indigo-50/50
-              hover:text-indigo-600
-              hover:shadow-indigo-100
-            "
-          >
-            <FolderKanban className="h-3.5 w-3.5" />
-            All Projects
-          </Link>
-
-          {/* Vertical Divider */}
-          <div className="mx-1 hidden h-8 w-px bg-slate-200 sm:block" />
-
-          {/* User */}
+        <div className="ml-auto flex items-center gap-2">
           {user && (
-            <div className="group flex items-center gap-2.5 rounded-xl px-1.5 py-1.5 transition hover:bg-slate-50">
-              {/* Avatar */}
-              <div className="relative">
-                <div className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-indigo-100 bg-gradient-to-br from-indigo-50 via-violet-50 to-purple-100 shadow-sm">
-                  <span className="bg-gradient-to-br from-indigo-600 to-violet-600 bg-clip-text text-xs font-black text-transparent">
-                    {user.name.charAt(0).toUpperCase()}
-                  </span>
-                </div>
+            <div className="hidden items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 md:flex">
+              <div
+                className={`flex h-6 w-6 items-center justify-center rounded-lg ${
+                  isOwner
+                    ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400'
+                    : 'bg-violet-500/10 text-violet-600 dark:text-violet-400'
+                }`}
+              >
+                {isOwner ? <Shield size={13} /> : <Sparkles size={13} />}
+              </div>
+              <div>
+                <p className="text-[9px] font-medium uppercase tracking-wider text-[var(--muted)]">
+                  Role
+                </p>
+                <p className="text-[11px] font-bold capitalize text-[var(--foreground)]">
+                  {isOwner ? 'Owner' : 'Member'}
+                </p>
+              </div>
+            </div>
+          )}
 
-                {/* Online indicator */}
-                <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-full border-2 border-white bg-emerald-500">
-                  <span className="h-1 w-1 rounded-full bg-white" />
-                </span>
+          <ThemeToggle />
+
+          <div className="mx-1 hidden h-8 w-px bg-[var(--border)] sm:block" />
+
+          {user && (
+            <div className="flex items-center gap-2.5">
+              <div className="relative">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-sm font-bold text-white shadow-md shadow-indigo-500/15">
+                  {userInitial}
+                </div>
+                <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[var(--background)] bg-emerald-500" />
               </div>
 
-              {/* User details */}
-              <div className="hidden max-w-[155px] md:block">
-                <p className="truncate text-[11px] font-black leading-tight text-slate-950">
+              <div className="hidden max-w-[150px] sm:block">
+                <p className="truncate text-[12px] font-bold text-[var(--foreground)]">
                   {user.name}
                 </p>
-
-                <p className="mt-0.5 truncate text-[9px] font-medium leading-tight text-slate-400">
+                <p className="truncate text-[10px] text-[var(--muted)]">
                   {user.email}
                 </p>
               </div>
             </div>
           )}
 
-          {/* Logout */}
           <button
             type="button"
-            onClick={() => logout()}
-            title="Log out"
-            aria-label="Log out"
-            className="
-              group
-              flex h-9 w-9
-              items-center justify-center
-              rounded-xl
-              border border-slate-200/80
-              bg-white/80
-              text-slate-500
-              shadow-sm
-              transition-all duration-200
-              hover:border-rose-200
-              hover:bg-rose-50
-              hover:text-rose-600
-              hover:shadow-rose-100
-            "
+            onClick={logout}
+            title="Sign out"
+            aria-label="Sign out"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] transition-all duration-200 hover:border-red-200 hover:bg-red-50 hover:text-red-600 dark:hover:border-red-500/20 dark:hover:bg-red-500/10 dark:hover:text-red-400"
           >
-            <LogOut className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+            <LogOut size={17} />
           </button>
         </div>
       </div>
+
+      {projectName && (
+        <div className="border-t border-[var(--border)] bg-[var(--surface-secondary)] px-4 py-2.5 lg:hidden">
+          <div className="flex items-center gap-2">
+            <FolderKanban size={14} className="shrink-0 text-indigo-500" />
+            <div className="min-w-0">
+              <p className="truncate text-[11px] font-bold text-[var(--foreground)]">
+                {projectName}
+              </p>
+              <p className="text-[9px] text-[var(--muted)]">
+                Current project
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
-};
+}

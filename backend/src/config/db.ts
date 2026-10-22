@@ -1,38 +1,38 @@
 import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 
-let memoryServer: MongoMemoryServer | null = null;
+export const connectDatabase = async (
+  uriOverride?: string
+): Promise<string> => {
+  const mongoUri = uriOverride || process.env.MONGODB_URI;
 
-export const connectDatabase = async (uriOverride?: string): Promise<string> => {
-  const envUri = uriOverride || process.env.MONGODB_URI;
-
-  // If explicit URI is provided, attempt connection
-  if (envUri && !envUri.includes('memory')) {
-    try {
-      await mongoose.connect(envUri, {
-        serverSelectionTimeoutMS: 2500,
-      });
-      console.log(`[MongoDB] Connected to database at ${envUri}`);
-      return envUri;
-    } catch (err) {
-      console.warn(`[MongoDB] Could not connect to external MongoDB at ${envUri}. Falling back to embedded MongoMemoryServer...`);
-    }
+  if (!mongoUri) {
+    throw new Error(
+      'MONGODB_URI is not defined. Please add your MongoDB connection string to the .env file.'
+    );
   }
 
-  // Fallback to MongoMemoryServer for standalone zero-dependency execution
-  if (!memoryServer) {
-    memoryServer = await MongoMemoryServer.create();
+  try {
+    await mongoose.connect(mongoUri, {
+      serverSelectionTimeoutMS: 10000,
+    });
+
+    console.log('========================================');
+    console.log('✅ MongoDB connected successfully');
+    console.log(`📦 Database: ${mongoose.connection.name}`);
+    console.log('========================================');
+
+    return mongoUri;
+  } catch (error) {
+    console.error('========================================');
+    console.error('❌ MongoDB connection failed');
+    console.error('========================================');
+    console.error(error);
+
+    throw error;
   }
-  const memoryUri = memoryServer.getUri();
-  await mongoose.connect(memoryUri);
-  console.log(`[MongoDB] Connected to in-memory database at ${memoryUri}`);
-  return memoryUri;
 };
 
 export const disconnectDatabase = async (): Promise<void> => {
   await mongoose.disconnect();
-  if (memoryServer) {
-    await memoryServer.stop();
-    memoryServer = null;
-  }
+  console.log('🔌 MongoDB disconnected');
 };

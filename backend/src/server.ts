@@ -16,7 +16,7 @@ const startServer = async (): Promise<void> => {
     app.listen(PORT, () => {
       console.log('');
       console.log('========================================');
-      console.log('🏠 TaskFlow Backend Server');
+      console.log('🏠 TeamFlow Backend Server');
       console.log('========================================');
       console.log(`🚀 Server: http://localhost:${PORT}`);
       console.log(`❤️  Health: http://localhost:${PORT}/api/health`);
@@ -26,7 +26,7 @@ const startServer = async (): Promise<void> => {
     });
   } catch (error) {
     console.error('');
-    console.error('❌ Failed to start TaskFlow server');
+    console.error('❌ Failed to start TeamFlow server');
     console.error(error);
     console.error('');
 

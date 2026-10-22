@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
-// @ts-expect-error Next.js handles global CSS side-effect imports at build time.
+
+// @ts-expect-error Next.js handles global CSS imports at build time.
 import './globals.css';
 import { AuthProvider } from '../context/AuthContext';
+import { ThemeProvider } from '../context/ThemeProvider';
 
 export const metadata: Metadata = {
   title: 'TeamFlow | Team Project Management',
@@ -15,9 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-[#080812]">
-      <body className="min-h-screen bg-[#080812] text-black antialiased">
-        <AuthProvider>{children}</AuthProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

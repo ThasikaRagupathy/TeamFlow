@@ -2,29 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =========================================================
+   TEAMFLOW THEME SYSTEM
+   ========================================================= */
+
 :root {
-  --background: #080812;
-  --foreground: #f8fafc;
+  color-scheme: light;
+
+  --background: #f7f8fc;
+  --foreground: #0f172a;
+
+  --surface: #ffffff;
+  --surface-secondary: #f8fafc;
+  --surface-hover: #f1f5f9;
+
+  --card: rgba(255, 255, 255, 0.82);
+  --card-solid: #ffffff;
+
+  --border: #e2e8f0;
+  --border-light: #eef2f7;
+
+  --muted: #64748b;
+  --muted-light: #94a3b8;
+
   --primary: #6366f1;
   --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+
   --secondary: #8b5cf6;
-  --border: rgba(255, 255, 255, 0.1);
-  --muted: #94a3b8;
+
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 8px 30px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.09);
+
+  --grid-color: rgba(99, 102, 241, 0.045);
 }
+
+/* =========================================================
+   DARK THEME
+   ========================================================= */
+
+html.dark {
+  color-scheme: dark;
+
+  --background: #080812;
+  --foreground: #f8fafc;
+
+  --surface: #10101c;
+  --surface-secondary: #141421;
+  --surface-hover: #1b1b2a;
+
+  --card: rgba(255, 255, 255, 0.045);
+  --card-solid: #11111d;
+
+  --border: rgba(255, 255, 255, 0.09);
+  --border-light: rgba(255, 255, 255, 0.055);
+
+  --muted: #94a3b8;
+  --muted-light: #64748b;
+
+  --primary: #818cf8;
+  --primary-light: #a5b4fc;
+  --primary-dark: #6366f1;
+
+  --secondary: #a78bfa;
+
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --info: #60a5fa;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.35);
+
+  --grid-color: rgba(129, 140, 248, 0.035);
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
 
 * {
   box-sizing: border-box;
 }
 
 html {
-  background: var(--background);
   scroll-behavior: smooth;
+  background: var(--background);
 }
 
 body {
   margin: 0;
+  min-height: 100vh;
+
   color: var(--foreground);
   background: var(--background);
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -33,16 +112,15 @@ body {
     "Helvetica Neue",
     Arial,
     sans-serif;
-  min-height: 100vh;
-}
 
-/* Better text rendering */
-body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
-/* Remove default button/input appearance issues */
 button,
 input,
 textarea,
@@ -50,65 +128,229 @@ select {
   font: inherit;
 }
 
-/* Custom focus ring for keyboard accessibility */
-*:focus-visible {
-  outline: 2px solid var(--primary-light);
-  outline-offset: 2px;
+button {
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Selection */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 ::selection {
-  background: rgba(99, 102, 241, 0.35);
-  color: #ffffff;
+  background: rgba(99, 102, 241, 0.25);
+  color: var(--foreground);
 }
 
-/* Scrollbar */
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d0d18;
+  background: var(--surface-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #303047;
+  background: #475569;
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #4f4f6b;
+  background: var(--primary);
 }
 
-/* Firefox scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #303047 #0d0d18;
+  scrollbar-color: #475569 var(--surface-secondary);
 }
 
-/* Reusable glass effect */
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+*:focus-visible {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   TEAMFLOW COMPONENT UTILITIES
+   ========================================================= */
+
 @layer components {
-  .glass {
-    @apply bg-white/[0.04] border border-white/[0.08] backdrop-blur-xl;
+  .tf-page {
+    min-height: 100vh;
+    background: var(--background);
+    color: var(--foreground);
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
   }
 
-  .glass-hover {
-    @apply transition-all duration-300 hover:bg-white/[0.06] hover:border-white/[0.12];
+  .tf-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
   }
 
-  .gradient-text {
-    @apply bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent;
+  .tf-card-hover {
+    transition:
+      transform 0.25s ease,
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
   }
 
-  .gradient-button {
-    @apply bg-gradient-to-r from-indigo-500 to-violet-600
-      hover:from-indigo-400 hover:to-violet-500
-      transition-all duration-300;
+  .tf-card-hover:hover {
+    transform: translateY(-2px);
+    background: var(--surface);
+    border-color: rgba(99, 102, 241, 0.22);
+    box-shadow: var(--shadow-md);
+  }
+
+  .tf-input {
+    width: 100%;
+    background: var(--surface);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .tf-input::placeholder {
+    color: var(--muted-light);
+  }
+
+  .tf-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    outline: none;
+  }
+
+  .tf-gradient-text {
+    background: linear-gradient(
+      90deg,
+      var(--primary),
+      var(--secondary)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .tf-gradient-button {
+    background: linear-gradient(
+      135deg,
+      #6366f1,
+      #7c3aed
+    );
+    color: white;
+
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .tf-gradient-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.25);
+  }
+
+  .tf-gradient-button:active {
+    transform: translateY(0);
+  }
+
+  .tf-grid-bg {
+    background-image:
+      linear-gradient(
+        to right,
+        var(--grid-color) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        var(--grid-color) 1px,
+        transparent 1px
+      );
+
+    background-size: 40px 40px;
   }
 }
 
-/* Smooth animations */
+/* =========================================================
+   AMBIENT BACKGROUND
+   ========================================================= */
+
+.tf-ambient {
+  position: relative;
+  overflow: hidden;
+}
+
+.tf-ambient::before {
+  content: "";
+  position: fixed;
+  width: 420px;
+  height: 420px;
+
+  top: -180px;
+  right: -100px;
+
+  border-radius: 50%;
+
+  background: rgba(99, 102, 241, 0.08);
+
+  filter: blur(80px);
+
+  pointer-events: none;
+}
+
+.tf-ambient::after {
+  content: "";
+  position: fixed;
+  width: 360px;
+  height: 360px;
+
+  bottom: -180px;
+  left: -120px;
+
+  border-radius: 50%;
+
+  background: rgba(139, 92, 246, 0.07);
+
+  filter: blur(80px);
+
+  pointer-events: none;
+}
+
+html.dark .tf-ambient::before {
+  background: rgba(99, 102, 241, 0.13);
+}
+
+html.dark .tf-ambient::after {
+  background: rgba(139, 92, 246, 0.11);
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -125,7 +367,37 @@ select {
   animation: fadeIn 0.4s ease-out forwards;
 }
 
-/* Prevent horizontal overflow */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.25s ease-out forwards;
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 html,
 body {
   overflow-x: hidden;
