@@ -54,12 +54,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const register = async (name: string, email: string, password: string) => {
-    const res = await api.register({ name, email, password });
-    localStorage.setItem('teamflow_token', res.token);
-    localStorage.setItem('teamflow_user', JSON.stringify(res.user));
-    setToken(res.token);
-    setUser(res.user);
-    router.push('/projects');
+    await api.register({ name, email, password });
+    router.push('/login?registered=true');
   };
 
   const logout = async () => {

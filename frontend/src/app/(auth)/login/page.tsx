@@ -35,6 +35,7 @@ function LoginForm() {
 
   const sessionExpired =
     searchParams.get('session_expired') === 'true';
+  const registered = searchParams.get('registered') === 'true';
 
   /* =======================================================
      LOGIN
@@ -911,6 +912,13 @@ function LoginForm() {
               {/* ==========================================
                   SESSION EXPIRED
               ========================================== */}
+
+              {registered && (
+                <div className="mb-5 flex items-start gap-3 rounded-xl border border-emerald-400/20 bg-emerald-400/10 p-3.5 text-xs text-emerald-200">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                  <span>Account created successfully. Sign in to continue.</span>
+                </div>
+              )}
 
               {sessionExpired && (
                 <div
